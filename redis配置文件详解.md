@@ -53,7 +53,7 @@
     # 数据库数量，默认数据库是0，可用select选择一个
     database 16
     
-    ##### 快照配置 #####
+    ######################################## 快照配置 ############################
     
     # save [seconds] [changes]
     # 多少秒后至少有多少次key值改变就持久化数据
@@ -76,7 +76,7 @@
     # dir数据目录，rdb和aof都会在这个目录下
     dir ./
     
-    ##### 主从复制配置 #####
+    ####################################### 主从复制配置 ################################
     
     # slaveof [masterip] [masterport] 主机端口
     slaveof ip port
@@ -92,3 +92,110 @@
     # 从服务器是否只读
     slave-read-only yes
     
+    # 是否使用socket方式复制数据
+    # disk方式：多个slave共享rdb文件
+    # socket方式：用socket顺序复制(适用磁盘慢，网络快)
+    repl-diskless-sync no
+    
+    # socket复制延时时间
+    repl-diskless-sync-delay 5
+    
+    # slave向master发起ping请求的时间间隔
+    repl-ping-slave-period 10
+    
+    # 复制连接超时时间，要比上值大
+    repl-timeout 60
+    
+    # 是否禁止复制tcp连接的tcp nodelay参数
+    repl-disable-tcp-nodelay no
+    
+    # 复制缓冲区大小
+    repl-backlog-size 1mb
+    
+    # master不再联系slave时释放backlog(内存)
+    repl-backlog-ttl 3600
+    
+    # slave优先级
+    slave-priority 100
+    
+    # 当健康的slave少于N，master就禁止写入
+    min-slave-to-write 3
+    
+    # 延迟小于此的slave被认为是健康的
+    min-slave-max-lag 10
+    
+    ##### 安全 #####
+    requirepass [your pwd]
+    
+    ########################################## 客户端配置 ###########################
+    
+    # 能连上redis的最大数
+    maxclients 10000
+    
+    # 最大内存容量
+    maxmemory [nytes]
+    
+    # 内存达到上限的处理策略
+    # volatile-lru:lru算法移除过期的key
+    # volatile-random：随机移除过期的key
+    # volatile-ttl：根据最近过期时间来删除
+    # allkeys-lru：lru算法移除所有key
+    # allkeys-random:随机移除任何key
+    # noeviction:不移除key，只返回一个写错误
+    maxmemory noeviction
+    
+    ######################################### 持久化配置 #######################
+    
+    # 是否启用aof(Append Only File)模式
+    appendonly yes
+    
+    # aof文件名称
+    appendfilename "appendonly.aof"
+    
+    # aof持久化策略
+    # no
+    # always
+    # everysec
+    appendfsync everysec
+    
+    # 
+    no-appendfsync-on-rewrite no
+    
+    # 当前aof大小超过之前重写的aof大小的百分值多少在进行重写
+    auto-aof-rewrite-percentage 100
+    # 允许重写的最小aof大小
+    auto-aof-rewrite-min-size 64mb
+    
+    # redis启动时是否加载截断的aof文件
+    aof-load-truncated yes
+    
+    ########################################## 集群设置 #############################3
+    
+    # 是否开启集群
+    cluster-enabled yes
+    
+    # 集群配置文件，无需自己编辑
+    cluster-config-file nodes.conf
+    
+    # 节点间连接的超时时间
+    cluster-node-timeout 15000
+    
+    # 用来判断slave是否有master断开连接过长，导致slave数据陈旧在故障转移的时候不能用
+    cluster-slave-validity-factor 10
+    
+    # 集群是否要求全slots覆盖
+    cluster-require-full-coverage no
+    
+    # 主节点需要的最小从节点数
+    cluster-migration-barrier 1
+    
+    ############################################ 慢日志 #################################
+    
+    # 慢查询时间
+    slowlog-log-slower-than 10000
+    
+    # 慢查询日志长度
+    slowlog-max-len 128
+    
+    # 延迟监控（0表示关闭）
+    latency-monitor-threshold 0
