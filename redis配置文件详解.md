@@ -181,7 +181,8 @@
     cluster-node-timeout 15000
     
     # 用来判断slave是否有master断开连接过长，导致slave数据陈旧在故障转移的时候不能用
-    cluster-slave-validity-factor 10
+    # 失效校验次数
+    cluster-slave-validity-factor 1
     
     # 集群是否要求全slots覆盖
     cluster-require-full-coverage no
